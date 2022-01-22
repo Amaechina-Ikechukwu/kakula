@@ -165,12 +165,14 @@ function singEval(currentOp, Op) {
   if (isNaN(current)) return "";
   let computation = "";
   switch (Op) {
-    case "sq":
+    case "sqrt":
       computation = sqrt(current);
       break;
     case "f":
       computation = calcFact(current);
       break;
+    case "sq":
+      computation = current * current;
   }
   return computation.toString();
 }
@@ -317,6 +319,19 @@ function App() {
                 maxWidth="sm"
                 display="grid"
               >
+                <SingEve
+                  sx={{
+                    border: 0,
+                    backgroundColor: "transparent",
+                    color: "black",
+                    borderRight: 0,
+                    fontSize: 20,
+                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                    backgroundColor: "#7b89ef",
+                  }}
+                  operation="sq"
+                  dispatch={dispatch}
+                />
                 <OpDigit
                   sx={{
                     border: 0,
@@ -377,7 +392,7 @@ function App() {
                     boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
                     backgroundColor: "#7b89ef",
                   }}
-                  operation="sq"
+                  operation="sqrt"
                   dispatch={dispatch}
                 />
               </Box>
