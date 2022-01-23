@@ -133,6 +133,8 @@ function reducer(state, { type, payload }) {
         ...state,
         currentOp: singEval(state.currentOp, payload.operation),
         overwrite: true,
+        showOp: payload.display,
+        showDig: state.currentOp,
       };
 
     case ACTIONS.DEL_DIGIT:
@@ -265,7 +267,10 @@ function angles(current, op) {
 }
 
 function App() {
-  const [{ currentOp, previousOp, Op }, dispatch] = useReducer(reducer, {});
+  const [{ currentOp, previousOp, Op, showOp, showDig }, dispatch] = useReducer(
+    reducer,
+    {}
+  );
   const [scy, setScy] = useState(true);
   const [shift, setShift] = useState(false);
 
@@ -282,8 +287,17 @@ function App() {
         }}
       >
         <Box bgcolor="white" borderRadius="10px" maxWidth="sm">
+          {shift ? (
+            <Box padding="5px">
+              <Typography>
+                {showOp}({showDig})
+              </Typography>
+            </Box>
+          ) : (
+            <Box height={"20px"} width="100%"></Box>
+          )}
           <Box
-            height="40%"
+            height="50%"
             sx={{
               backgroundColor: "#201e1e",
               borderTopRadius: "10px",
@@ -384,6 +398,7 @@ function App() {
                       backgroundColor: "#2f45b5",
                     }}
                     operation="sin()"
+                    display="sin"
                     dispatch={dispatch}
                   />
                 )}
@@ -426,6 +441,7 @@ function App() {
                       backgroundColor: "#2f45b5",
                     }}
                     operation="cos()"
+                    display="cos"
                     dispatch={dispatch}
                   />
                 )}
@@ -468,6 +484,7 @@ function App() {
                       backgroundColor: "#2f45b5",
                     }}
                     operation="tan()"
+                    display="tan"
                     dispatch={dispatch}
                   />
                 )}
@@ -482,6 +499,7 @@ function App() {
                     backgroundColor: "#2f45b5",
                   }}
                   operation="sq"
+                  display="sq"
                   dispatch={dispatch}
                 />
                 <SingEve
@@ -495,6 +513,7 @@ function App() {
                     backgroundColor: "#2f45b5",
                   }}
                   operation="sqrt"
+                  display="sqrt"
                   dispatch={dispatch}
                 />
 
@@ -509,6 +528,7 @@ function App() {
                     backgroundColor: "#2f45b5",
                   }}
                   operation="f"
+                  display="f"
                   dispatch={dispatch}
                 />
 
@@ -522,6 +542,7 @@ function App() {
                     boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
                   }}
                   operation="c"
+                  display="c"
                   dispatch={dispatch}
                 />
                 <OpDigit
@@ -534,6 +555,7 @@ function App() {
                     boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
                   }}
                   operation="p"
+                  display="p"
                   dispatch={dispatch}
                 />
                 <OpDigit

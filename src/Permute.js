@@ -1,7 +1,7 @@
 import { ACTIONS } from "./App";
 import Button from "@mui/material/Button";
 
-export default function SingEve({ dispatch, operation, sx }) {
+export default function SingEve({ dispatch, operation, sx, display }) {
   return (
     <Button
       sx={sx}
@@ -9,7 +9,7 @@ export default function SingEve({ dispatch, operation, sx }) {
         dispatch({ type: ACTIONS.SINGEVAl, payload: { operation } });
       }}
     >
-      {operation}
+      {display !== null ? display : operation}
     </Button>
   );
 }
