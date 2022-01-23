@@ -5,7 +5,7 @@ import { shadows } from "@mui/system";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import { Container, Divider, Grid } from "@mui/material";
+import { Container, Divider, Grid, Typography } from "@mui/material";
 import { useReducer, useState } from "react";
 import Digit from "./Digit";
 import OpDigit from "./OpButton";
@@ -58,12 +58,6 @@ export const ACTIONS = {
 function reducer(state, { type, payload }) {
   switch (type) {
     case ACTIONS.ADD_DIGIT:
-      // if (state.currentOp == null && state.previousOp == null) {
-      //   return {
-      //     ...state,
-      //     currentOp: payload.operation,
-      //   };
-      // }
       if (state.overwrite) {
         return {
           ...state,
@@ -162,6 +156,7 @@ function reducer(state, { type, payload }) {
 function singEval(currentOp, Op) {
   console.log(currentOp);
   const current = parseFloat(currentOp);
+
   if (isNaN(current)) return "";
   let computation = "";
   switch (Op) {
@@ -173,6 +168,16 @@ function singEval(currentOp, Op) {
       break;
     case "sq":
       computation = current * current;
+      break;
+    case "sin()":
+      computation = angles(current, Op);
+      break;
+    case "cos()":
+      computation = angles(current, Op);
+      break;
+    case "tan()":
+      computation = angles(current, Op);
+      break;
   }
   return computation.toString();
 }
@@ -216,6 +221,15 @@ function evaluate({ currentOp, previousOp, Op }) {
         computation = "Math error";
       }
       break;
+    case "sin":
+      computation = prev * Math.sin(current);
+      break;
+    case "cos":
+      computation = prev * Math.cos(current);
+      break;
+    case "tan":
+      computation = prev * Math.tan(current);
+      break;
   }
 
   return computation.toString();
@@ -238,10 +252,22 @@ function calcFact(num, curr) {
   }
   return fact;
 }
+function angles(current, op) {
+  if (op == "sin()") {
+    return Math.sin(current);
+  }
+  if (op == "cos()") {
+    return Math.cos(current);
+  }
+  if (op == "tan()") {
+    return Math.tan(current);
+  }
+}
 
 function App() {
   const [{ currentOp, previousOp, Op }, dispatch] = useReducer(reducer, {});
-  const [scy, setScy] = useState(false);
+  const [scy, setScy] = useState(true);
+  const [shift, setShift] = useState(false);
 
   return (
     <Container maxwidth="50px">
@@ -311,7 +337,7 @@ function App() {
                 sx={{
                   backgroundColor: "rgba(225,225,225, .15)",
                   borderTopRadius: "10px",
-                  gridTemplateColumns: "repeat(1, 1fr)",
+                  gridTemplateColumns: "repeat(2, 1fr)",
                   gap: 1,
                   paddingTop: 5,
                   paddingRight: 5,
@@ -319,7 +345,174 @@ function App() {
                 maxWidth="sm"
                 display="grid"
               >
+                {!shift ? (
+                  <Box
+                    display={"flex"}
+                    flexDirection={"column"}
+                    alignItems={"center"}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontSize={15}
+                      color="rgba(0,0,0,0.5)"
+                    >
+                      sin()
+                    </Typography>
+                    <OpDigit
+                      sx={{
+                        border: 0,
+                        backgroundColor: "transparent",
+                        color: "white",
+                        borderRight: 0,
+                        fontSize: 20,
+                        boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                        backgroundColor: "#2f45b5",
+                      }}
+                      operation="sin"
+                      dispatch={dispatch}
+                    />
+                  </Box>
+                ) : (
+                  <SingEve
+                    sx={{
+                      border: 0,
+                      backgroundColor: "transparent",
+                      color: "white",
+                      borderRight: 0,
+                      fontSize: 20,
+                      boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                      backgroundColor: "#2f45b5",
+                    }}
+                    operation="sin()"
+                    dispatch={dispatch}
+                  />
+                )}
+                {!shift ? (
+                  <Box
+                    display={"flex"}
+                    flexDirection={"column"}
+                    alignItems={"center"}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontSize={15}
+                      color="rgba(0,0,0,0.5)"
+                    >
+                      cos()
+                    </Typography>
+                    <OpDigit
+                      sx={{
+                        border: 0,
+                        backgroundColor: "transparent",
+                        color: "white",
+                        borderRight: 0,
+                        fontSize: 20,
+                        boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                        backgroundColor: "#2f45b5",
+                      }}
+                      operation="cos"
+                      dispatch={dispatch}
+                    />
+                  </Box>
+                ) : (
+                  <SingEve
+                    sx={{
+                      border: 0,
+                      backgroundColor: "transparent",
+                      color: "white",
+                      borderRight: 0,
+                      fontSize: 20,
+                      boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                      backgroundColor: "#2f45b5",
+                    }}
+                    operation="cos()"
+                    dispatch={dispatch}
+                  />
+                )}
+                {!shift ? (
+                  <Box
+                    display={"flex"}
+                    flexDirection={"column"}
+                    alignItems={"center"}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontSize={15}
+                      color="rgba(0,0,0,0.5)"
+                    >
+                      tan()
+                    </Typography>
+                    <OpDigit
+                      sx={{
+                        border: 0,
+                        backgroundColor: "transparent",
+                        color: "white",
+                        borderRight: 0,
+                        fontSize: 20,
+                        boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                        backgroundColor: "#2f45b5",
+                      }}
+                      operation="tan"
+                      dispatch={dispatch}
+                    />
+                  </Box>
+                ) : (
+                  <SingEve
+                    sx={{
+                      border: 0,
+                      backgroundColor: "transparent",
+                      color: "white",
+                      borderRight: 0,
+                      fontSize: 20,
+                      boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                      backgroundColor: "#2f45b5",
+                    }}
+                    operation="tan()"
+                    dispatch={dispatch}
+                  />
+                )}
                 <SingEve
+                  sx={{
+                    border: 0,
+                    backgroundColor: "transparent",
+                    color: "white",
+                    borderRight: 0,
+                    fontSize: 20,
+                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                    backgroundColor: "#2f45b5",
+                  }}
+                  operation="sq"
+                  dispatch={dispatch}
+                />
+                <SingEve
+                  sx={{
+                    border: 0,
+                    backgroundColor: "transparent",
+                    color: "white",
+                    borderRight: 0,
+                    fontSize: 20,
+                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                    backgroundColor: "#2f45b5",
+                  }}
+                  operation="sqrt"
+                  dispatch={dispatch}
+                />
+
+                <SingEve
+                  sx={{
+                    border: 0,
+                    backgroundColor: "transparent",
+                    color: "white",
+                    borderRight: 0,
+                    fontSize: 20,
+                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                    backgroundColor: "#2f45b5",
+                  }}
+                  operation="f"
+                  dispatch={dispatch}
+                />
+
+                <OpDigit
                   sx={{
                     border: 0,
                     backgroundColor: "transparent",
@@ -327,9 +520,8 @@ function App() {
                     borderRight: 0,
                     fontSize: 20,
                     boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                    backgroundColor: "#7b89ef",
                   }}
-                  operation="sq"
+                  operation="c"
                   dispatch={dispatch}
                 />
                 <OpDigit
@@ -356,291 +548,262 @@ function App() {
                   operation="e"
                   dispatch={dispatch}
                 />
-                <SingEve
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                    backgroundColor: "#7b89ef",
-                  }}
-                  operation="f"
-                  dispatch={dispatch}
-                />
-                <OpDigit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  operation="c"
-                  dispatch={dispatch}
-                />
-
-                <SingEve
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                    backgroundColor: "#7b89ef",
-                  }}
-                  operation="sqrt"
-                  dispatch={dispatch}
-                />
               </Box>
             ) : null}
-            <Box>
-              <ButtonGroup
-                variant="outlined"
-                aria-label=" danger button group"
+            <Box
+              variant="outlined"
+              aria-label=" danger button group"
+              sx={{
+                display: "grid",
+
+                padding: 5,
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: 1,
+                border: 0,
+              }}
+              borderRadius="10px"
+            >
+              <Button
+                onClick={() => dispatch({ type: ACTIONS.CLEAR })}
                 sx={{
-                  display: "grid",
-
-                  padding: 5,
-                  gridTemplateColumns: "repeat(4, 1fr)",
-                  gap: 1,
+                  gridRow: "1",
+                  gridColumn: "span 2",
                   border: 0,
+                  backgroundColor: "#d11a1a",
+                  color: "white",
                 }}
-                borderRadius="10px"
               >
-                <Button
-                  onClick={() => dispatch({ type: ACTIONS.CLEAR })}
-                  sx={{
-                    gridRow: "1",
-                    gridColumn: "span 2",
-                    border: 0,
-                    backgroundColor: "#d11a1a",
-                    color: "white",
-                  }}
-                >
-                  AC
-                </Button>
-                <Button
-                  onClick={() => dispatch({ type: ACTIONS.DEL_DIGIT })}
-                  sx={{
-                    gridRow: "1",
-                    gridColumn: "span 1",
-                    border: 0,
-                    backgroundColor: "#e53030",
-                    color: "white",
-                  }}
-                >
-                  DEL
-                </Button>
+                AC
+              </Button>
+              <Button
+                onClick={() => dispatch({ type: ACTIONS.DEL_DIGIT })}
+                sx={{
+                  gridRow: "1",
+                  gridColumn: "span 1",
+                  border: 0,
+                  backgroundColor: "#e53030",
+                  color: "white",
+                }}
+              >
+                DEL
+              </Button>
+              <Button
+                onClick={() => setShift(!shift)}
+                sx={{
+                  gridRow: "1",
+                  gridColumn: "span 1",
+                  border: 0,
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  color: "white",
+                }}
+              >
+                SHIFT
+              </Button>
 
-                <OpDigit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  operation="/"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit={"1"}
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="2"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="3"
-                  dispatch={dispatch}
-                />
-                <OpDigit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  operation="*"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="4"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="5"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="6"
-                  dispatch={dispatch}
-                />
-                <OpDigit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  operation="+"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="7"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="8"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="9"
-                  dispatch={dispatch}
-                />
-                <OpDigit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  operation="-"
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="."
-                  dispatch={dispatch}
-                />
-                <Digit
-                  sx={{
-                    border: 0,
-                    backgroundColor: "transparent",
-                    color: "black",
-                    borderRight: 0,
-                    fontSize: 20,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  digit="0"
-                  dispatch={dispatch}
-                />
+              <OpDigit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                operation="/"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit={"1"}
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="2"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="3"
+                dispatch={dispatch}
+              />
+              <OpDigit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                operation="*"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="4"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="5"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="6"
+                dispatch={dispatch}
+              />
+              <OpDigit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                operation="+"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="7"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="8"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="9"
+                dispatch={dispatch}
+              />
+              <OpDigit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                operation="-"
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="."
+                dispatch={dispatch}
+              />
+              <Digit
+                sx={{
+                  border: 0,
+                  backgroundColor: "transparent",
+                  color: "black",
+                  borderRight: 0,
+                  fontSize: 20,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                digit="0"
+                dispatch={dispatch}
+              />
 
-                <Button
-                  onClick={() => dispatch({ type: ACTIONS.EVALUATE })}
-                  sx={{
-                    gridColumn: "span 1",
-                    border: 0,
-                    backgroundColor: "#172bbd",
-                    color: "white",
-                    hover: "backgroundColor: blue",
-                  }}
-                >
-                  =
-                </Button>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    border: 0,
-                    boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
-                  }}
-                  onClick={() => setScy(!scy)}
-                >
-                  Show {scy ? "Less" : "More"}
-                </Button>
-              </ButtonGroup>
+              <Button
+                onClick={() => dispatch({ type: ACTIONS.EVALUATE })}
+                sx={{
+                  gridColumn: "span 1",
+                  border: 0,
+                  backgroundColor: "#172bbd",
+                  color: "white",
+                  hover: "backgroundColor: blue",
+                }}
+              >
+                =
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{
+                  border: 0,
+                  boxShadow: "rgba(100,100,111,0.4) 0px 7px 29px 0px",
+                }}
+                onClick={() => setScy(!scy)}
+              >
+                Show {scy ? "Less" : "More"}
+              </Button>
             </Box>
           </Box>
         </Box>
