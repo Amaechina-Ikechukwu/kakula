@@ -282,7 +282,7 @@ function App() {
   const [shift, setShift] = useState(false);
 
   return (
-    <BrowserRouter>
+  
       <Container maxwidth="50px">
         <Grid
           display="flex"
@@ -839,7 +839,7 @@ function App() {
           </Box>
         </Grid>
       </Container>
-    </BrowserRouter>
+    
   );
 }
 
